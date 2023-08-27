@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User vhod</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="vhod.css">
+   
+</head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<body style="background-color: #18191E">
+    
+    
+  <section class="reg"> 
+        
+    <div class="block1" id="LoginForm">
+      <h1 class="aty" >АТУ СЕРВИС</h1>
+      <h4 class="LC">Вход в личный кабинет</h4>
+          
+      <form class="vhod" action="/authentification"  @submit.prevent="submitForm">
+          
+        <div class="form-control">
+
+          <label class="bykvi"  for="">Адрес эл.почты</label>
+          <br>
+          <input class="emailinp" type="email" id="email" placeholder="example@example.ru" v-model="email">
+
+        </div>
+        <br>
+        <div class="pass-group" id="password">
+                
+          <label class="bykvi"  for="">Пароль</label>
+          <br>
+          <input class="form-control-item" type="password" :type="showPassword ? 'text' : 'password'" minlength="8" maxlength="25" placeholder="Пароль" v-model="passwordUs">
+          <button class="show-password-btn" @click.prevent="showPassword = !showPassword" >
+            <img class="glas" :src="showPassword ? 'img/eye.on.png' : 'img/eye.off.png'" alt="Toggle Password Visibility">
+          </button>
+          <p  v-if= "!isValidPassword && passwordUs.length " class="error-msg">*неверные данные</p>  
+          <br>
+        </div>
+              
+          
+
+        <div class="teleph1">
+          <a class="teleph" href="#">Другие способы входа</a>
+        </div>
+
+        <div class="vosta">
+          <p  style="color: white; ">Редкий гость?  <a class="silka" href="#">Восстановим</a></p>
+        </div>
+               
+        <br>
+
+        <input type="button" value="Войти" >
+        <div class="registr">
+          <a class="registr1" href="#">Зарегистрироваться</a>
+        </div>
+
+      </form>
+    </div>
+        
+  </section>
+
+  <script src="vue.config.js"></script>
+</body>
+</html>
