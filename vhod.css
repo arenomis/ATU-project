@@ -1,0 +1,193 @@
+
+ /* Стили для заголовка */
+  .aty {
+    
+    position: relative;
+    left: 20px;
+    color: white;
+  }
+
+  .LC {
+    position: relative;
+    bottom: 18px;
+    color: white;
+    position: relative;
+    left: 20px;
+
+  }
+  
+  /* Стили для блока входа */
+  .block1 {
+    width: 300px;
+    height: 650px;
+    top: 838px;
+    left: 764px;
+    margin: 5% auto;
+    padding: 10px;
+    background-color: #18191E;
+    
+    border-radius: 10px;
+  }
+  
+  /* Стили для формы входа */
+  .vhod {
+    margin-top: 20px;
+    
+  }
+  
+  
+  /* Стили для поля ввода email */
+  .emailinp {
+
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: black;
+    background-color: white;
+    font-size: 20px;
+    position: relative;
+    left: 20px;
+  }
+  
+  /* Стили для поля ввода пароля */
+  .form-control {
+    position: relative;
+    width: 290px;
+    height: 60px;
+  }
+  
+  .pass-group {
+    margin-top: 10px;
+    width: 290px;
+    height: 60px;
+  }
+  
+  .form-control-item {
+    width: 80%;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: black;
+    background-color: white;
+    position: relative;
+    left: 20px;
+    
+  }
+  
+  .passCheck {
+    margin-top: 5px;
+  }
+  
+  /* Стили для кнопок войти */
+  input[type="button"] {
+    width: 50%;
+    padding: 10px;
+    background-color: #D8315B;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+    font-size: 20px;
+    box-shadow: inset 5px 5px 7px 0px #F0507A, inset -5px -5px 4px 0px #C51F49;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    top: 160px;
+    
+  }
+  
+  input[type="button"]:hover {
+    background-color: #C51F49;
+  }
+
+  /* Стили для кнопок глазика*/
+
+  .show-password-btn {
+    
+    background-color: transparent;
+    border: none;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+    left: 276px;
+    bottom: 40px;
+  }
+  .glas {
+    width: 39px;
+    height: 26px;
+  }
+
+  .show-password-btn i {
+    font-size: 18px;
+    color: #777;
+  }
+  
+  .show-password-btn:hover i {
+    color: #333;
+    
+  }
+
+ 
+/* Стили для label */
+  .bykvi {
+    position: relative;
+    left: 20px;
+    color: #EDC500;
+    font-size: 18px;
+  }
+/* Стили для восстановления данных*/
+  .vosta {
+    text-align: center;
+    position: relative;
+    top: 120px;
+    font-size: 18px;
+  }
+
+  .silka{
+    text-decoration: none;
+    color: #D8315B ;
+  }
+/* Стили для ошибки */
+  .error-msg{
+    color: rgb(155, 14, 14);
+    font-size: 17px;
+    position: absolute;
+    left: 43.5%;
+    bottom: 57%;
+    transform: translateY(5px);
+  }
+
+  /* Стили для гиперссылки другие способы входа */
+  .teleph1 {
+    font-size: 18px;
+    position: relative;
+    top: 80px;
+    text-align: center;
+  }
+
+
+  .teleph {
+    text-decoration: none;
+    color: #D8315B ;
+  }
+
+  /* Стили для гиперссылки регистрация */
+
+  .registr {
+    text-align: center;
+    font-size: 18px;
+    position: relative;
+    top: 230px;
+  }
+  .registr1 {
+    text-decoration: none;
+    color: #D8315B ;
+  }
+  
