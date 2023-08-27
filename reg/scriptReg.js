@@ -29,7 +29,7 @@
 
               <div class="form-control">
                 <label class="form-txt">Мобильный телефон</label><br>
-                <input class="form-control item" type="tel" name="phone" id="numberPhone" v-model="numberPhone" @input="formatPhoneNumber" autocomplete="off" maxlength="12">
+                <input class="form-control item" type="tel" name="phone" id="phone" v-model="phone" @input="formatPhoneNumber" autocomplete="off" maxlength="12">
               </div>
 
               <div class="pass-group form-control" id="password">
@@ -59,7 +59,7 @@
 
               <div class="form-control">
                 <label class="form-txt">ИНН организации</label><br>
-                <input class="form-control" type="text" name="inn" v-model="INN" @input="formatINN">
+                <input class="form-control" type="text" name="inn" id="inn" v-model="INN" @input="formatINN">
               </div>
             
               <div class="form-control">
