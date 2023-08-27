@@ -65,8 +65,8 @@
               <div class="form-control">
                 <label class="form-txt">Полномочия</label><br>
                 <select class="form-control item" v-model="position" name="position">
-                  <option value="client" name="APM_Clients">Клиент</option>
-                  <option value="employee" name="APM_Executors">Сотрудник</option>
+                  <option value="client" name="client">Клиент</option>
+                  <option value="employee" name="employee">Сотрудник</option>
                 </select>
               </div>
             
