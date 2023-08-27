@@ -48,7 +48,7 @@ var passwordReg = new Vue({
       event.preventDefault(); // Отменяем стандартное действие отправки формы
 
       // Проверяем на незаполненные поля
-      if (!this.username.trim() || !this.email.trim() || !this.passwordUs.trim() || !this.passwordUs2.trim() || !this.name.trim() || !this.lastname.trim() || !this.surname.trim()) {
+      if (!this.email.trim() || !this.passwordUs.trim() || !this.passwordUs2.trim() || !this.name.trim() || !this.lastname.trim() || !this.surname.trim()) {
         this.showError = true;
         return;
       }
