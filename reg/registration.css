@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700&display=swap');
+/* Верхняя часть*/
+html, body {
+    background-color: #18191E;
+    color: #FFFAFF;
+    font-family: Manrope;
+    margin: 0px;
+    padding: 0;
+}
+h2 {
+    font-weight: 700;
+    margin-left: -145px;
+}
+h3{
+    font-weight: 200;
+    font-size: 18px;
+    margin-left: -180px;
+}
+.contener1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align: center;
+    padding: 10px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+    background-color: #18191E;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+/* Нижняя часть*/
+.reg {
+    color: #EDC500;
+}
+.container-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #18191E;
+    color: #FFFAFF;
+    font-family: Manrope;
+    padding-top: 100px;
+}
+.contener2 {
+    text-align: center;
+    padding: 20px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+    background-color: #18191E;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+.form-control::placeholder {
+    font-weight: 700;
+    color: #A29F9C;
+}
+input.form-control {
+    margin-top: 5px;
+    width: 290px;
+    height: 40px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: Manrope;
+    font-size: 15px;
+    font-weight: 700;
+  }
+#LoginForm .form-control label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 20px; 
+    margin-left: auto;
+}
+/*Интерактивная часть*/
+select {
+    margin-top: 5px;
+    width: 290px;
+    height: 40px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: Manrope;
+    font-size: 15px;
+    color: #A29F9C;
+    font-weight: 700;
+}
+.error-msg{
+    color: #ff3300;
+    font-weight: 200;
+    font-size: 15px;
+}
+.submit {
+    background: #D8315B;
+    box-shadow: 5px 5px 7px 0px #F0507A inset, -5px -5px 4px 0px #C51F49 inset;
+    width: 240px;
+    height: 50px;
+    border-radius: 5px;
+    padding: 0;
+    color: #ccc;
+    font-size: 20px;
+    text-align: center;
+    line-height: 50px;
+    font-weight: 700;
+    margin-top: 40px;
+}
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.custom-eye-icon {
+    cursor: pointer;
+    width: 39px;
+    height: 26px;
+    flex-shrink: 0;
+    margin-left: -62px; 
+    margin-top: 5px;
+}
+.password-input-container input {
+    width: 260px; 
+    padding-right: 30px; 
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-family: Manrope;
+    font-size: 15px;
+    font-weight: 700;
+}
