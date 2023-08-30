@@ -8,17 +8,29 @@ var passwordReg = new Vue({
     name: '',
     lastname: '',
     surname: '',
-    position: 'employee',
+    position: 'client',
+    passwordValidError: false,
+    passwordFocused: false,
     showError: false,
     showPassword: false,
     showPassword2: false,
     emailAlreadyRegistered: false,
     phone: '7',
     showErrorPhone: false, // Флаг для отображения ошибки в номере телефона
-    INN: '',
-    formSubmitted: false, // Флаг для отслеживания отправки формы
+    INN: ''
   },
   computed: {
+    OffCheck() {
+      if (this.passwordUs.length = 0) {
+        this.passwordValidError = false;
+      }
+    },
+    formatName() {
+      // Удаляем все, кроме русских букв
+      this.name = this.name.replace(/[^А-ЯЁа-яё]/g, '');
+      this.lastname = this.lastname.replace(/[^А-ЯЁа-яё]/g, '');
+      this.surname = this.surname.replace(/[^А-ЯЁа-яё]/g, '');
+    },
     formatINN() {
       // Удаляем все, кроме цифр
       this.INN = this.INN.replace(/\D/g, '');
@@ -41,12 +53,21 @@ var passwordReg = new Vue({
       if (!this.phone.startsWith('7')) {
           this.phone = '7' + this.phone;
       }
-      if (this.formSubmitted && this.phone.length !== 11) { 
-        this.showErrorPhone = true;
-      } else {
-        this.showErrorPhone = false;
-        this.formSubmitted = false;
+       if (this.phone.length === 11) { 
+        this.showErrorPhone = false;   
       }
+    },
+    checkPhone(){
+      if (this.phone.length !== 11) { 
+        this.showErrorPhone = true;   
+      }
+    },
+    checkPasswordFocused() {
+      this.passwordFocused = true;
+      this.checkPasswordValidity()
+    },
+    checkPasswordValidity() {
+      this.passwordValidError = this.passwordUs.length > 0 && !this.isValidPassword && this.passwordFocused;
     },
     toggleShowPassword2() {
       this.showPassword2 = !this.showPassword2;
@@ -55,10 +76,10 @@ var passwordReg = new Vue({
     RegUser(event) {
       event.preventDefault(); // Отменяем стандартное действие отправки формы
 
-      this.formSubmitted = true; // Устанавливаем флаг, что форма была отправлена
+    
 
       // Проверяем на незаполненные поля
-      if (!this.email.trim() || this.INN.trim() || !this.passwordUs.trim() || !this.passwordUs2.trim() || !this.name.trim() || !this.lastname.trim() || !this.surname.trim()) {
+      if (!this.email.trim() || !this.INN.trim() || !this.passwordUs.trim() || !this.passwordUs2.trim() || !this.name.trim() || !this.lastname.trim() || !this.surname.trim()) {
         this.showError = true;
         return;
       }
@@ -68,9 +89,9 @@ var passwordReg = new Vue({
         return;
       }
       if (this.phone.length !== 11) {
-          this.showErrorPhone = true;
+        this.showErrorPhone = true;
         return;
-      }
+      } 
 
       axios.post('#', { // Адрес сервера сюда как будет передаем данные пользователя
 
@@ -82,7 +103,7 @@ var passwordReg = new Vue({
         } else {
           // Дополнительный код для обработки успешной регистрации
         }
-        this.showErrorPhone = false;
+      
       })
       .catch(error => {
         // Обработка ошибок
@@ -100,7 +121,7 @@ var passwordReg = new Vue({
       this.lastname = '';
       this.surname = '';
       this.inn = '';
-      this.position = 'employee';
+      this.position = 'client';
     }
   }
 });
