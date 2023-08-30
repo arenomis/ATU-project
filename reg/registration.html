@@ -29,13 +29,21 @@
 
               <div class="form-control">
                 <label class="form-txt">Мобильный телефон</label><br>
-                <input class="form-control item" type="tel" name="phone" id="phone" v-model="phone" @input="formatPhoneNumber" autocomplete="off" maxlength="11">
+                <input class="form-control item" type="tel" name="phone" id="phone" v-model="phone" @input="formatPhoneNumber" @blur="checkPhone" autocomplete="off" maxlength="11">
                 <p v-if="showErrorPhone" class="error-msg">*Номер должен содержать 11 цифр</p>
               </div>
 
               <div class="pass-group form-control" id="password">
                 <label class="form-txt">Введите пароль</label><br>
-                <input class="form-control item" type="password" :type="showPassword ? 'text' : 'password'" minlength="8" maxlength="25" v-model="passwordUs"><br>
+                <div class="password-input-container">
+                  <input class="form-control item password-input" type="password" :type="showPassword ? 'text' : 'password'" minlength="8" maxlength="25" v-model="passwordUs" @blur="checkPasswordFocused" @input="OffCheck">
+                  <span class="custom-password-toggle-icon" @click="toggleShowPassword2">
+                    <img class="custom-eye-icon" :src="showPassword2 ? 'img/eye.on.png' : 'img/eye.off.png'" alt="Toggle Password Visibility">
+                  </span>
+                </div>
+
+                <p v-if="passwordValidError && this.passwordUs.length > 0" class="error-msg">*Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры</p>
+                
                 <div class="form-control">
                   <label class="form-txt">Повторите пароль</label><br>
                   <div class="password-input-container">
@@ -44,18 +52,17 @@
                           <img class="custom-eye-icon" :src="showPassword2 ? 'img/eye.on.png' : 'img/eye.off.png'" alt="Toggle Password Visibility">
                       </span>
                   </div>
-                  <p v-if="passwordUs2.length > 0 && passwordUs !== passwordUs2" class="error-msg">*Пароли не совпадают</p>
-                  <p v-if="!isValidPassword && passwordUs2.length > 0 && passwordUs === passwordUs2" class="error-msg">*Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры</p>
+                <p v-if="passwordUs2.length > 0 && passwordUs !== passwordUs2" class="error-msg">*Пароли не совпадают</p>
               </div>
               </div>
               
               <div class="form-control">
                 <label class="form-txt">Имя</label><br>
-                <input class="form-control item" type="text" id="name" v-model="name" name="name"><br>
+                <input class="form-control item" type="text" id="name" v-model="name" name="name" pattern=".{2,}" title="Минимальная длина имени - 2 символа" required @input="formatName"><br>
                 <label class="form-txt">Фамилия</label><br>
-                <input class="form-control item" type="text" id="lastname" v-model="lastname" name="lastname"><br>
+                <input class="form-control item" type="text" id="lastname" v-model="lastname" name="lastname" pattern=".{2,}" title="Минимальная длина фамилии - 2 символа" required @input="formatName"><br>
                 <label class="form-txt">Отчество</label><br>
-                <input class="form-control item" type="text" id="surname" v-model="surname" name="surname">
+                <input class="form-control item" type="text" id="surname" v-model="surname" name="surname" pattern=".{2,}" title="Минимальная длина отчества - 2 символа" required @input="formatName">
               </div>
 
               <div class="form-control">
@@ -66,7 +73,7 @@
               <div class="form-control">
                 <label class="form-txt">Полномочия</label><br>
                 <select class="form-control item" v-model="position" name="position">
-                  <option value="client" name="client">Клиент</option>
+                  <option value="client" name="client" selected>Клиент</option>
                   <option value="employee" name="employee">Сотрудник</option>
                 </select>
               </div>
