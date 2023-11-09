@@ -1,6 +1,6 @@
 <template>
   <div style="width:80vh; height:100%; display: block; text-align: center; margin-left: auto; margin-right: auto; margin-top: 20px;">
-    <button @click="toggleTable" class="archive-button">
+    <button @click="toggleTable" :class="{'active': showTable}" class="archive-button">
       Запланированно
     </button>
     <q-table
@@ -8,6 +8,9 @@
       :rows="rows"
       :columns="columns"
       row-key="index"
+      style="border-top-left-radius: 0; border-top-right-radius: 0;"
+      hide-bottom
+      virtual-scroll
     />
   </div>
 </template>
@@ -24,45 +27,78 @@
   text-align: center;
   cursor: pointer;
   outline: none;
+  border-radius: 4px;
+}
+.archive-button.active {
+  border-bottom-left-radius: 0; /* Убираем нижнее скругление */
+  border-bottom-right-radius: 0;
 }
 </style>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export default {
   data() {
     return {
-      showTable: true, // Исходно отображаем таблицу "Архив"
+      showTable: true,
       rows: [
         {
-          Time: '26.10.2023',
-          CarNumber: 'A123AA456',
-          CarType: 'легковая',
-          Stage: 'выполнено',
+          Time: '27.10.2023 16:30',
+          CarNumber: 'B123BB456',
+          CarType: 'легковой',
+          Stage: 'ожидание',
           index: 1
         },
         {
-          Time: '26.11.2023',
-          CarNumber: 'A789AA012',
-          CarType: 'грузовая',
-          Stage: 'отменено',
+          Time: '28.11.2023 10:00',
+          CarNumber: 'B789BB012',
+          CarType: 'газель',
+          Stage: 'в процессе',
           index: 2
         },
         {
-          Time: '29.12.2023',
-          CarNumber: 'A456AA789',
-          CarType: 'Грузовая с прицепом',
-          Stage: 'Начать',
+          Time: '29.12.2023 14:45',
+          CarNumber: 'B456BB789',
+          CarType: 'грузовой',
+          Stage: 'выполнено',
           index: 3
         },
-        // Добавьте дополнительные строки данных, если необходимо
+        {
+          Time: '30.01.2024 12:15',
+          CarNumber: 'C123CC456',
+          CarType: 'грузовой+прицеп',
+          Stage: 'ожидание',
+          index: 4
+        },
+        {
+          Time: '22.02.2024 09:30',
+          CarNumber: 'C789CC012',
+          CarType: 'автобус ',
+          Stage: 'в процессе',
+          index: 5
+        },
+        {
+          Time: '01.03.2024 16:00',
+          CarNumber: 'C456CC789',
+          CarType: 'автобус+салон',
+          Stage: 'в процессе',
+          index: 6
+        },
+        {
+          Time: '01.04.2024 08:30',
+          CarNumber: 'D123DD456',
+          CarType: 'техника',
+          Stage: 'ожидание',
+          index: 7
+        },
       ],
       columns: [
         {
           name: 'index',
           label: '',
-          field: 'index'
+          field: 'index',
+          sortable: false
         },
         {
           name: 'Time',
@@ -70,7 +106,7 @@ export default {
           label: 'Время',
           align: 'left',
           field: 'Time',
-          format: val => `${val}`,
+          
           sortable: true
         },
         {
@@ -78,22 +114,21 @@ export default {
           label: 'Номер машины',
           align: 'left',
           field: 'CarNumber',
-          format: val => `${val}`,
-          sortable: true
+          sortable: false
         },
         {
           name: 'CarType',
           label: 'Тип машины',
           align: 'left',
           field: 'CarType',
-          sortable: true
+          sortable: false
         },
         {
           name: 'Stage',
           label: 'Этап',
           align: 'left',
           field: 'Stage',
-          sortable: true
+          sortable: false
         },
       ],
     };
@@ -102,6 +137,21 @@ export default {
     toggleTable() {
       this.showTable = !this.showTable;
     },
+  },
+  mounted() {
+    this.rows.sort((a, b) => {
+      const getDateFromString = (str) => {
+        const [datePart, timePart] = str.split(' ');
+        const [day, month, year] = datePart.split('.');
+        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        return new Date(`${formattedDate}T${timePart}`);
+      };
+
+      const dateA = getDateFromString(a.Time);
+      const dateB = getDateFromString(b.Time);
+
+      return dateA.getTime() - dateB.getTime();
+    });
   },
 };
 </script>
