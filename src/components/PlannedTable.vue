@@ -1,157 +1,184 @@
 <template>
-  <div style="width:80vh; height:100%; display: block; text-align: center; margin-left: auto; margin-right: auto; margin-top: 20px;">
-    <button @click="toggleTable" :class="{'active': showTable}" class="archive-button">
-      Запланированно
+  <div
+    style="
+      width: 80vh;
+      height: 100%;
+      display: block;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+    "
+  >
+    <button
+      @click="toggleTable"
+      :class="{ active: showTable }"
+      class="archive-button"
+    >
+      Запланировано
     </button>
     <q-table
       v-if="showTable"
-      :rows="rows"
+      :rows="filteredRows"
       :columns="columns"
       row-key="index"
-      style="border-top-left-radius: 0; border-top-right-radius: 0;"
+      style="border-top-left-radius: 0; border-top-right-radius: 0"
       hide-bottom
       virtual-scroll
-    />
+    >
+      <template v-slot:body-cell="props">
+        <q-td :props="props">
+          <div v-if="props.col.name === 'date'">
+            <button @click="toggleDetails(props.row.date)">
+              {{ props.row.date }}
+            </button>
+          </div>
+          <div
+            v-if="selectedDate === props.row.date && props.col.name !== 'date'"
+          >
+            {{ props.row[props.col.name] }}
+          </div>
+        </q-td>
+      </template>
+    </q-table>
+    <div v-if="selectedDate">
+      <h2>{{ selectedDate }}</h2>
+      <q-table
+        :rows="infoRows"
+        :columns="infoColumns"
+        row-key="index"
+        style="border-top-left-radius: 0; border-top-right-radius: 0"
+        hide-bottom
+        virtual-scroll
+      />
+    </div>
   </div>
 </template>
 
-<style>
-/* Стили для кнопки "Архив" */
-.archive-button {
-  background-color: white;
-  color: black;
-  border: none;
-  width: 100%;
-  padding: 0;
-  font-size: inherit;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  border-radius: 4px;
-}
-.archive-button.active {
-  border-bottom-left-radius: 0; /* Убираем нижнее скругление */
-  border-bottom-right-radius: 0;
-}
-</style>
-
 <script>
-import { ref, onMounted } from 'vue';
-
 export default {
   data() {
     return {
+      selectedDate: null,
       showTable: true,
       rows: [
         {
-          Time: '27.10.2023 16:30',
-          CarNumber: 'B123BB456',
-          CarType: 'легковой',
-          Stage: 'ожидание',
-          index: 1
+          Time: "27.10.2023 16:30",
+          CarNumber: "B123BB456",
+          CarType: "легковой",
+          Stage: "ожидание",
+          index: 1,
         },
         {
-          Time: '28.11.2023 10:00',
-          CarNumber: 'B789BB012',
-          CarType: 'газель',
-          Stage: 'в процессе',
-          index: 2
+          Time: "28.11.2023 10:00",
+          CarNumber: "B789BB012",
+          CarType: "газель",
+          Stage: "в процессе",
+          index: 2,
         },
         {
-          Time: '29.12.2023 14:45',
-          CarNumber: 'B456BB789',
-          CarType: 'грузовой',
-          Stage: 'выполнено',
-          index: 3
+          Time: "29.12.2023 14:45",
+          CarNumber: "B456BB789",
+          CarType: "грузовой",
+          Stage: "выполнено",
+          index: 3,
         },
         {
-          Time: '30.01.2024 12:15',
-          CarNumber: 'C123CC456',
-          CarType: 'грузовой+прицеп',
-          Stage: 'ожидание',
-          index: 4
-        },
-        {
-          Time: '22.02.2024 09:30',
-          CarNumber: 'C789CC012',
-          CarType: 'автобус ',
-          Stage: 'в процессе',
-          index: 5
-        },
-        {
-          Time: '01.03.2024 16:00',
-          CarNumber: 'C456CC789',
-          CarType: 'автобус+салон',
-          Stage: 'в процессе',
-          index: 6
-        },
-        {
-          Time: '01.04.2024 08:30',
-          CarNumber: 'D123DD456',
-          CarType: 'техника',
-          Stage: 'ожидание',
-          index: 7
+          Time: "27.10.2023 10:00",
+          CarNumber: "B789BB012",
+          CarType: "газель",
+          Stage: "в процессе",
+          index: 4,
         },
       ],
       columns: [
         {
-          name: 'index',
-          label: '',
-          field: 'index',
-          sortable: false
+          name: "date",
+          label: "Дата",
+          field: "date",
+          sortable: true,
         },
         {
-          name: 'Time',
-          required: true,
-          label: 'Время',
-          align: 'left',
-          field: 'Time',
-          
-          sortable: true
+          name: "time",
+          label: "Время",
+          field: "time",
         },
         {
-          name: 'CarNumber',
-          label: 'Номер машины',
-          align: 'left',
-          field: 'CarNumber',
-          sortable: false
+          name: "number",
+          label: "Номер машины",
+          field: "number",
         },
         {
-          name: 'CarType',
-          label: 'Тип машины',
-          align: 'left',
-          field: 'CarType',
-          sortable: false
+          name: "type",
+          label: "Тип машины",
+          field: "type",
         },
         {
-          name: 'Stage',
-          label: 'Этап',
-          align: 'left',
-          field: 'Stage',
-          sortable: false
+          name: "stage",
+          label: "Этап",
+          field: "stage",
+        },
+      ],
+      infoColumns: [
+        {
+          name: "number",
+          label: "Номер машины",
+          align: "left",
+          field: "number",
+          sortable: false,
+        },
+        {
+          name: "type",
+          label: "Тип машины",
+          align: "left",
+          field: "type",
+          sortable: false,
+        },
+        {
+          name: "stage",
+          label: "Этап",
+          align: "left",
+          field: "stage",
+          sortable: false,
         },
       ],
     };
   },
-  methods: {
-    toggleTable() {
-      this.showTable = !this.showTable;
+  computed: {
+    filteredRows() {
+      return this.rows.map((row) => ({
+        date: row.Time.split(" ")[0],
+        time: row.Time.split(" ")[1],
+        number: row.CarNumber,
+        type: row.CarType,
+        stage: row.Stage,
+      }));
+    },
+    infoRows() {
+      return this.rows
+        .filter((row) => row.Time.split(" ")[0] === this.selectedDate)
+        .map((row) => ({
+          number: row.CarNumber,
+          type: row.CarType,
+          stage: row.Stage,
+        }));
     },
   },
-  mounted() {
-    this.rows.sort((a, b) => {
-      const getDateFromString = (str) => {
-        const [datePart, timePart] = str.split(' ');
-        const [day, month, year] = datePart.split('.');
-        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        return new Date(`${formattedDate}T${timePart}`);
-      };
-
-      const dateA = getDateFromString(a.Time);
-      const dateB = getDateFromString(b.Time);
-
-      return dateA.getTime() - dateB.getTime();
-    });
+  methods: {
+    toggleDetails(date) {
+      // При нажатии на дату, показываем/скрываем данные
+      this.selectedDate = this.selectedDate === date ? null : date;
+    },
+    toggleTable() {
+      this.showTable = !this.showTable;
+      this.selectedDate = null; // Скрыть информацию при переключении таблицы
+    },
   },
 };
 </script>
+
+<style>
+.date-button {
+  margin-right: 8px;
+}
+</style>

@@ -1,24 +1,36 @@
 <template>
   <q-page>
     <q-card class="bg-primary">
-      <div class="conteiner bg-white" style="width:350px; height:100%; display: block; text-align: center; margin-left: auto; margin-right: auto;">
+      <div
+        class="conteiner bg-white"
+        style="
+          width: 350px;
+          height: 100%;
+          display: block;
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto;
+        "
+      >
         <q-card-section>
           <h3 class="text-h6">Регистрация</h3>
         </q-card-section>
 
         <q-card-section>
           <q-form @submit="registerUser">
-
             <q-input
               filled
               v-model="lastname"
               label="Фамилия"
               hint="Минимальная длина - 2 символа"
               :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-                val => val.length >= 2 || 'Необходимо вписать минимум 2 символа',
-                val => /^[А-Яа-яЁё]+$/.test(val) || 'Пожалуйста, используйте только русские буквы',
-              ]" 
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) =>
+                  val.length >= 2 || 'Необходимо вписать минимум 2 символа',
+                (val) =>
+                  /^[А-Яа-яЁё]+$/.test(val) ||
+                  'Пожалуйста, используйте только русские буквы',
+              ]"
               lazy-rules
             ></q-input>
 
@@ -28,10 +40,13 @@
               label="Имя"
               hint="Минимальная длина - 2 символа"
               :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-                val => val.length >= 2 || 'Необходимо вписать минимум 2 символа',
-                val => /^[А-Яа-яЁё]+$/.test(val) || 'Пожалуйста, используйте только русские буквы',
-              ]" 
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) =>
+                  val.length >= 2 || 'Необходимо вписать минимум 2 символа',
+                (val) =>
+                  /^[А-Яа-яЁё]+$/.test(val) ||
+                  'Пожалуйста, используйте только русские буквы',
+              ]"
               lazy-rules
             ></q-input>
 
@@ -41,38 +56,52 @@
               label="Отчество"
               hint="Минимальная длина - 2 символа"
               :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-                val => val.length >= 2 || 'Необходимо вписать минимум 2 символа',
-                val => /^[А-Яа-яЁё]+$/.test(val) || 'Пожалуйста, используйте только русские буквы',
-              ]" 
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) =>
+                  val.length >= 2 || 'Необходимо вписать минимум 2 символа',
+                (val) =>
+                  /^[А-Яа-яЁё]+$/.test(val) ||
+                  'Пожалуйста, используйте только русские буквы',
+              ]"
               lazy-rules
             ></q-input>
 
-            <q-select color="secondary" filled v-model="model" :options="options" label="Полномочия" hint="Выберите полномочия">
+            <q-select
+              color="secondary"
+              filled
+              v-model="model"
+              :options="options"
+              label="Полномочия"
+              hint="Выберите полномочия"
+            >
               <template v-if="model" v-slot:append>
-                <q-icon name="cancel" @click.stop.prevent="model = null" class="cursor-pointer" />
+                <q-icon
+                  name="cancel"
+                  @click.stop.prevent="model = null"
+                  class="cursor-pointer"
+                />
               </template>
             </q-select>
 
             <div class="q-gutter-sm" v-if="model === 'Клиент'">
-               <q-radio
-                 v-model="selectedShape"
-                 color="secondary"
-                 checked-icon="task_alt"
-                 unchecked-icon="panorama_fish_eye"
-                 val="Юр. лицо"
-                 label="Юр. лицо"
-                 :rules="shapeRules"
-               />
-               <q-radio
-                 v-model="selectedShape"
-                 color="secondary"
-                 checked-icon="task_alt"
-                 unchecked-icon="panorama_fish_eye"
-                 val="Физ. лицо"
-                 label="Физ. лицо"
-                 :rules="shapeRules"
-               />
+              <q-radio
+                v-model="selectedShape"
+                color="secondary"
+                checked-icon="task_alt"
+                unchecked-icon="panorama_fish_eye"
+                val="Юр. лицо"
+                label="Юр. лицо"
+                :rules="shapeRules"
+              />
+              <q-radio
+                v-model="selectedShape"
+                color="secondary"
+                checked-icon="task_alt"
+                unchecked-icon="panorama_fish_eye"
+                val="Физ. лицо"
+                label="Физ. лицо"
+                :rules="shapeRules"
+              />
             </div>
 
             <q-input
@@ -82,9 +111,7 @@
               label="ИНН организации"
               hint="ИНН организации"
               mask="##########"
-              :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-              ]"
+              :rules="[(val) => !!val || '* Необходимо заполнить поле']"
             ></q-input>
 
             <q-input
@@ -93,9 +120,7 @@
               label="Адрес эл.почты"
               type="email"
               hint="Email"
-              :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-              ]"
+              :rules="[(val) => !!val || '* Необходимо заполнить поле']"
             ></q-input>
 
             <q-input
@@ -106,51 +131,63 @@
               hint="Мобильный телефон"
               mask="+7 (###) ### - ## - ##"
               fill-mask
-              :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-              ]"
+              :rules="[(val) => !!val || '* Необходимо заполнить поле']"
             >
             </q-input>
 
-            <q-input 
+            <q-input
               label="Введите пароль"
-              v-model="password" 
-              filled 
-              :type="isPwd ? 'password' : 'text'" 
+              v-model="password"
+              filled
+              :type="isPwd ? 'password' : 'text'"
               hint="Пароль"
               :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-                val => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/.test(val) || '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
-                val => val.length >= 8 || 'Пароль должен содержать в себе минимум 8 символов',
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) =>
+                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/.test(val) ||
+                  '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
+                (val) =>
+                  val.length >= 8 ||
+                  'Пароль должен содержать в себе минимум 8 символов',
               ]"
-              lazy-rules>
+              lazy-rules
+            >
               <template v-slot:append>
                 <div class="cursor-pointer" @click="isPwd = !isPwd">
-                  <img :src="isPwd ? '/icons/eye.off.png' : '/icons/eye.on.png'" 
-                  alt="Toggle Password" 
-                  style="width: 30px; height: auto;"/>
+                  <img
+                    :src="isPwd ? '/icons/eye.off.png' : '/icons/eye.on.png'"
+                    alt="Toggle Password"
+                    style="width: 30px; height: auto"
+                  />
                 </div>
               </template>
-            </q-input> 
+            </q-input>
 
-            <q-input 
-              label = "Повторите пароль"
-              v-model="confirmPassword" 
-              filled 
-              :type="isPwd ? 'password' : 'text'" 
+            <q-input
+              label="Повторите пароль"
+              v-model="confirmPassword"
+              filled
+              :type="isPwd ? 'password' : 'text'"
               hint="Повторите пароль"
               :rules="[
-                val => !!val || '* Необходимо заполнить поле',
-                val => val === password || '* Пароли не совпадают',
-                val => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/.test(val) || '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
-                val => val.length >= 8 || 'Пароль должен содержать в себе минимум 8 символов'
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) => val === password || '* Пароли не совпадают',
+                (val) =>
+                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/.test(val) ||
+                  '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
+                (val) =>
+                  val.length >= 8 ||
+                  'Пароль должен содержать в себе минимум 8 символов',
               ]"
-              lazy-rules>
+              lazy-rules
+            >
               <template v-slot:append>
                 <div class="cursor-pointer" @click="isPwd = !isPwd">
-                  <img :src="isPwd ? '/icons/eye.off.png' : '/icons/eye.on.png'" 
-                  alt="Toggle Password" 
-                  style="width: 30px; height: auto;"/>
+                  <img
+                    :src="isPwd ? '/icons/eye.off.png' : '/icons/eye.on.png'"
+                    alt="Toggle Password"
+                    style="width: 30px; height: auto"
+                  />
                 </div>
               </template>
             </q-input>
@@ -170,7 +207,6 @@
             >
               *Данная почта уже зарегистрирована
             </q-alert>
-
           </q-form>
         </q-card-section>
       </div>
@@ -179,34 +215,32 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { ref } from "vue";
+import { useQuasar } from "quasar";
 
 export default {
-  setup () {
+  setup() {
     const $q = useQuasar();
-    const confirmPassword = ref('');
-    const email = ref('');
-    const phone = ref('');
-    const password = ref('');
-    const name = ref('');
-    const lastname = ref('');
-    const surname = ref('');
-    const INN = ref('');
-    const selectedShape = ref('');
+    const confirmPassword = ref("");
+    const email = ref("");
+    const phone = ref("");
+    const password = ref("");
+    const name = ref("");
+    const lastname = ref("");
+    const surname = ref("");
+    const INN = ref("");
+    const selectedShape = ref("");
 
     const shapeRules = [
-      val => !!val || '* Обязательно сделайте выбор', // Обязательный выбор
+      (val) => !!val || "* Обязательно сделайте выбор", // Обязательный выбор
     ];
 
-    const inputRef = ref(null)
+    const inputRef = ref(null);
     return {
-      model: ref(' '),
-      options: [
-        'Клиент', 'Сотрудник'
-      ],
+      model: ref(" "),
+      options: ["Клиент", "Сотрудник"],
       inputRef,
-      password: ref(''),
+      password: ref(""),
       isPwd: ref(true),
       email: ref(null),
       phone: ref(null),
@@ -217,7 +251,7 @@ export default {
       INN,
       selectedShape,
       shapeRules,
-    }
-  }
-}
+    };
+  },
+};
 </script>
