@@ -1,55 +1,67 @@
 <template>
-  <div
-    style="
-      width: 80vh;
-      height: 100%;
-      display: block;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 20px;
-    "
-  >
-    <button
+  <div class="q-pa-md container">
+    <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
-      class="archive-button"
-    >
-      Архив
-    </button>
+      class="archive-button q-mb-md"
+      label="Архив"
+    />
     <q-table
       v-if="showTable"
-      :rows="rows"
+      :rows="sortedRows"
       :columns="columns"
       row-key="index"
       style="border-top-left-radius: 0; border-top-right-radius: 0"
       hide-bottom
-      virtual-scroll
+      :rows-per-page="rows.length"
+      class="q-mt-md"
+      :rows-per-page-options="[0]"
+      :mobile-cols="1" 
     />
   </div>
 </template>
 
 <style>
-.archive-button {
-  background-color: white;
-  color: black;
-  border: none;
-  width: 100%;
-  padding: 0;
-  font-size: inherit;
+.container{
+  width: 80vh;
+  display: block;
   text-align: center;
-  cursor: pointer;
-  outline: none;
-  border-radius: 4px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
 }
+
+.q-mb-md {
+  margin-bottom: var(--q-space-md);
+}
+
+.q-mt-md {
+  margin-top: var(--q-space-md);
+}
+
 .archive-button.active {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 100vw;
+  }
+  .archive-button {
+    background-color: white;
+    color: black;
+    border: none;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+}
 </style>
 
 <script>
-import { ref, onMounted } from "vue";
+import moment from "moment";
 
 export default {
   data() {
@@ -57,69 +69,55 @@ export default {
       showTable: false,
       rows: [
         {
-          Time: "27.10.2023 16:30",
+          Date: "27.11.2023",
+          Time: "16:30",
           CarNumber: "B123BB456",
           CarType: "легковой",
-          Stage: "ожидание",
-          index: 1,
+          Stage: "выполнено",
         },
         {
-          Time: "28.11.2023 10:00",
+          Date: "30.11.2023",
+          Time: "10:00",
           CarNumber: "B789BB012",
           CarType: "газель",
-          Stage: "в процессе",
-          index: 2,
+          Stage: "выполнено",
         },
         {
-          Time: "29.12.2023 14:45",
+          Date: "29.12.2022",
+          Time: "14:45",
           CarNumber: "B456BB789",
           CarType: "грузовой",
           Stage: "выполнено",
-          index: 3,
         },
         {
-          Time: "30.01.2024 12:15",
+          Date: "30.01.2024",
+          Time: "12:15",
           CarNumber: "C123CC456",
           CarType: "грузовой+прицеп",
-          Stage: "ожидание",
-          index: 4,
+          Stage: "выполнено",
         },
         {
-          Time: "22.02.2024 09:30",
+          Date: "30.01.2024",
+          Time: "19:30",
           CarNumber: "C789CC012",
-          CarType: "автобус ",
-          Stage: "в процессе",
-          index: 5,
-        },
-        {
-          Time: "01.03.2024 16:00",
-          CarNumber: "C456CC789",
-          CarType: "автобус+салон",
-          Stage: "в процессе",
-          index: 6,
-        },
-        {
-          Time: "01.04.2024 08:30",
-          CarNumber: "D123DD456",
-          CarType: "техника",
-          Stage: "ожидание",
-          index: 7,
+          CarType: "автобус",
+          Stage: "выполнено",
         },
       ],
       columns: [
         {
-          name: "index",
-          label: "",
-          field: "index",
-          sortable: false,
+          name: "Date",
+          required: true,
+          label: "Дата",
+          align: "left",
+          field: "Date",
+          sortable: true,
         },
         {
           name: "Time",
-          required: true,
           label: "Время",
           align: "left",
           field: "Time",
-
           sortable: true,
         },
         {
@@ -146,28 +144,20 @@ export default {
       ],
     };
   },
+  computed: {
+    sortedRows() {
+      return [...this.rows].sort((a, b) => {
+        const dateTimeA = moment(`${a.Date} ${a.Time}`, "DD.MM.YYYY HH:mm");
+        const dateTimeB = moment(`${b.Date} ${b.Time}`, "DD.MM.YYYY HH:mm");
+        return dateTimeA - dateTimeB;
+      });
+    },
+  },
   methods: {
     toggleTable() {
       this.showTable = !this.showTable;
     },
   },
-  mounted() {
-    this.rows.sort((a, b) => {
-      const getDateFromString = (str) => {
-        const [datePart, timePart] = str.split(" ");
-        const [day, month, year] = datePart.split(".");
-        const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
-          2,
-          "0"
-        )}`;
-        return new Date(`${formattedDate}T${timePart}`);
-      };
-
-      const dateA = getDateFromString(a.Time);
-      const dateB = getDateFromString(b.Time);
-
-      return dateA.getTime() - dateB.getTime();
-    });
-  },
+  
 };
 </script>

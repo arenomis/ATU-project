@@ -1,184 +1,162 @@
 <template>
-  <div
-    style="
-      width: 80vh;
-      height: 100%;
-      display: block;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 20px;
-    "
-  >
-    <button
+  <div class="q-pa-md container">
+    <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
-      class="archive-button"
-    >
-      Запланировано
-    </button>
+      class="archive-button q-mb-md"
+      label="Запланировано"
+    />
     <q-table
       v-if="showTable"
-      :rows="filteredRows"
+      :rows="sortedRows"
       :columns="columns"
       row-key="index"
       style="border-top-left-radius: 0; border-top-right-radius: 0"
       hide-bottom
-      virtual-scroll
-    >
-      <template v-slot:body-cell="props">
-        <q-td :props="props">
-          <div v-if="props.col.name === 'date'">
-            <button @click="toggleDetails(props.row.date)">
-              {{ props.row.date }}
-            </button>
-          </div>
-          <div
-            v-if="selectedDate === props.row.date && props.col.name !== 'date'"
-          >
-            {{ props.row[props.col.name] }}
-          </div>
-        </q-td>
-      </template>
-    </q-table>
-    <div v-if="selectedDate">
-      <h2>{{ selectedDate }}</h2>
-      <q-table
-        :rows="infoRows"
-        :columns="infoColumns"
-        row-key="index"
-        style="border-top-left-radius: 0; border-top-right-radius: 0"
-        hide-bottom
-        virtual-scroll
-      />
-    </div>
+      :rows-per-page="rows.length"
+      class="q-mt-md"
+      :rows-per-page-options="[0]"
+      :mobile-cols="1" 
+    />
   </div>
 </template>
 
+<style>
+.container{
+  width: 80vh;
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.q-mb-md {
+  margin-bottom: var(--q-space-md);
+}
+
+.q-mt-md {
+  margin-top: var(--q-space-md);
+}
+
+.archive-button.active {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 100vw;
+  }
+  .archive-button {
+    background-color: white;
+    color: black;
+    border: none;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+}
+</style>
 <script>
+import moment from "moment";
+
 export default {
   data() {
     return {
-      selectedDate: null,
       showTable: true,
       rows: [
         {
-          Time: "27.10.2023 16:30",
+          Date: "27.11.2023",
+          Time: "16:30",
           CarNumber: "B123BB456",
           CarType: "легковой",
           Stage: "ожидание",
-          index: 1,
         },
         {
-          Time: "28.11.2023 10:00",
+          Date: "30.11.2023",
+          Time: "10:00",
           CarNumber: "B789BB012",
           CarType: "газель",
           Stage: "в процессе",
-          index: 2,
         },
         {
-          Time: "29.12.2023 14:45",
+          Date: "30.01.2024",
+          Time: "12:15",
+          CarNumber: "C123CC456",
+          CarType: "грузовой+прицеп",
+          Stage: "ожидание",
+        },
+        {
+          Date: "29.12.2022",
+          Time: "14:45",
           CarNumber: "B456BB789",
           CarType: "грузовой",
           Stage: "выполнено",
-          index: 3,
         },
+        
         {
-          Time: "27.10.2023 10:00",
-          CarNumber: "B789BB012",
-          CarType: "газель",
+          Date: "30.01.2024",
+          Time: "19:30",
+          CarNumber: "C789CC012",
+          CarType: "автобус ",
           Stage: "в процессе",
-          index: 4,
         },
       ],
       columns: [
         {
-          name: "date",
+          name: "Date",
           label: "Дата",
-          field: "date",
-          sortable: true,
+          align: "left",
+          field: "Date",
+          sortable: false,
         },
         {
-          name: "time",
+          name: "Time",
           label: "Время",
-          field: "time",
-        },
-        {
-          name: "number",
-          label: "Номер машины",
-          field: "number",
-        },
-        {
-          name: "type",
-          label: "Тип машины",
-          field: "type",
-        },
-        {
-          name: "stage",
-          label: "Этап",
-          field: "stage",
-        },
-      ],
-      infoColumns: [
-        {
-          name: "number",
-          label: "Номер машины",
           align: "left",
-          field: "number",
+          field: "Time",
           sortable: false,
         },
         {
-          name: "type",
-          label: "Тип машины",
+          name: "CarNumber",
+          label: "Номер машины",
           align: "left",
-          field: "type",
+          field: "CarNumber",
           sortable: false,
         },
         {
-          name: "stage",
+          name: "CarType",
+          label: "Тип машины",
+          align: "left",
+          field: "CarType",
+          sortable: false,
+        },
+        {
+          name: "Stage",
           label: "Этап",
           align: "left",
-          field: "stage",
+          field: "Stage",
           sortable: false,
         },
       ],
     };
   },
   computed: {
-    filteredRows() {
-      return this.rows.map((row) => ({
-        date: row.Time.split(" ")[0],
-        time: row.Time.split(" ")[1],
-        number: row.CarNumber,
-        type: row.CarType,
-        stage: row.Stage,
-      }));
-    },
-    infoRows() {
-      return this.rows
-        .filter((row) => row.Time.split(" ")[0] === this.selectedDate)
-        .map((row) => ({
-          number: row.CarNumber,
-          type: row.CarType,
-          stage: row.Stage,
-        }));
+    sortedRows() {
+      return [...this.rows].sort((a, b) => {
+        const dateTimeA = moment(`${a.Date} ${a.Time}`, "DD.MM.YYYY HH:mm");
+        const dateTimeB = moment(`${b.Date} ${b.Time}`, "DD.MM.YYYY HH:mm");
+        return dateTimeA - dateTimeB;
+      });
     },
   },
   methods: {
-    toggleDetails(date) {
-      // При нажатии на дату, показываем/скрываем данные
-      this.selectedDate = this.selectedDate === date ? null : date;
-    },
     toggleTable() {
       this.showTable = !this.showTable;
-      this.selectedDate = null; // Скрыть информацию при переключении таблицы
     },
   },
+  
 };
 </script>
-
-<style>
-.date-button {
-  margin-right: 8px;
-}
-</style>

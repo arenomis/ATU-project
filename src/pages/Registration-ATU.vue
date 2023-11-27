@@ -1,20 +1,19 @@
 <template>
-  <q-page>
-    <q-card class="bg-primary">
-      <div
-        class="conteiner bg-white"
-        style="
-          width: 350px;
-          height: 100%;
-          display: block;
-          text-align: center;
-          margin-left: auto;
-          margin-right: auto;
-        "
-      >
+  <q-dialog
+    v-model="dialogVisible"
+    style="max-width: 400px"
+    @hide="closeRegistrationDialog"
+  > 
+    <q-card class="">
+      <q-card-action class="bg-white text-secondary">
+        <q-btn flat icon="close" v-close-popup />
+      </q-card-action>
+
+      <div class="container bg-white">
         <q-card-section>
           <h3 class="text-h6">Регистрация</h3>
         </q-card-section>
+        
 
         <q-card-section>
           <q-form @submit="registerUser">
@@ -211,16 +210,23 @@
         </q-card-section>
       </div>
     </q-card>
-  </q-page>
+  </q-dialog>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useQuasar } from "quasar";
 
 export default {
-  setup() {
+  props: {
+    showRegistrationDialog: {
+      required: true,
+    },
+  },
+
+  setup(props, { emit }) {
     const $q = useQuasar();
+    const dialogVisible = ref(props.showRegistrationDialog);
     const confirmPassword = ref("");
     const email = ref("");
     const phone = ref("");
@@ -232,18 +238,29 @@ export default {
     const selectedShape = ref("");
 
     const shapeRules = [
-      (val) => !!val || "* Обязательно сделайте выбор", // Обязательный выбор
+      (val) => !!val || "* Обязательно сделайте выбор",
     ];
 
-    const inputRef = ref(null);
+    const registerUser = () => {
+      // Логика регистрации пользователя
+    };
+
+    const closeRegistrationDialog = () => {
+      emit("update:showRegistrationDialog", false);
+    };
+
+    watch(() => props.showRegistrationDialog, (newValue) => {
+      dialogVisible.value = newValue;
+    });
+
     return {
+      dialogVisible,
       model: ref(" "),
       options: ["Клиент", "Сотрудник"],
-      inputRef,
-      password: ref(""),
+      password,
       isPwd: ref(true),
-      email: ref(null),
-      phone: ref(null),
+      email,
+      phone,
       confirmPassword,
       name,
       lastname,
@@ -251,7 +268,19 @@ export default {
       INN,
       selectedShape,
       shapeRules,
+      registerUser,
+      closeRegistrationDialog,
     };
   },
 };
 </script>
+
+<style scoped>
+  .container {
+    width: 350px;
+    height: 100%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+  }
+</style>
