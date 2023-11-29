@@ -3,21 +3,32 @@
     v-model="dialogVisible"
     style="max-width: 400px"
     @hide="closeRegistrationDialog"
-  > 
+  >
     <q-card class="">
       <q-card-action class="bg-white text-secondary">
         <q-btn flat icon="close" v-close-popup />
+        <q-btn-toggle
+          v-model="LogReg"
+          spread
+          color="white"
+          text-color="secondary"
+          :options="[
+            { label: 'Вход', value: 'log' },
+            { label: 'Регистрация', value: 'reg' },
+          ]"
+        />
       </q-card-action>
 
       <div class="container bg-white">
         <q-card-section>
-          <h3 class="text-h6">Регистрация</h3>
+          <h3 v-if="LogReg === 'reg'" class="text-h6">Регистрация</h3>
+          <h3 v-if="LogReg === 'log'" class="text-h6">Вход</h3>
         </q-card-section>
-        
 
         <q-card-section>
           <q-form @submit="registerUser">
             <q-input
+              v-if="LogReg === 'reg'"
               filled
               v-model="lastname"
               label="Фамилия"
@@ -34,6 +45,7 @@
             ></q-input>
 
             <q-input
+              v-if="LogReg === 'reg'"
               filled
               v-model="name"
               label="Имя"
@@ -50,6 +62,7 @@
             ></q-input>
 
             <q-input
+              v-if="LogReg === 'reg'"
               filled
               v-model="surname"
               label="Отчество"
@@ -64,8 +77,8 @@
               ]"
               lazy-rules
             ></q-input>
-
             <q-select
+              v-if="LogReg === 'reg'"
               color="secondary"
               filled
               v-model="model"
@@ -102,7 +115,6 @@
                 :rules="shapeRules"
               />
             </div>
-
             <q-input
               v-if="selectedShape === 'Юр. лицо' && model === 'Клиент'"
               filled
@@ -123,6 +135,7 @@
             ></q-input>
 
             <q-input
+              v-if="LogReg === 'reg'"
               filled
               v-model="phone"
               label="Мобильный телефон"
@@ -135,6 +148,7 @@
             </q-input>
 
             <q-input
+              v-if="LogReg === 'reg'"
               label="Введите пароль"
               v-model="password"
               filled
@@ -147,7 +161,7 @@
                   '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
                 (val) =>
                   val.length >= 8 ||
-                  'Пароль должен содержать в себе минимум 8 символов',
+                  'Пароль должен содержать минимум 8 символов',
               ]"
               lazy-rules
             >
@@ -163,6 +177,7 @@
             </q-input>
 
             <q-input
+              v-if="LogReg === 'reg'"
               label="Повторите пароль"
               v-model="confirmPassword"
               filled
@@ -176,7 +191,7 @@
                   '* Пароль должен содержать заглавную латинскую букву, строчные буквы и цифры',
                 (val) =>
                   val.length >= 8 ||
-                  'Пароль должен содержать в себе минимум 8 символов',
+                  'Пароль должен содержать минимум 8 символов',
               ]"
               lazy-rules
             >
@@ -190,22 +205,39 @@
                 </div>
               </template>
             </q-input>
-
+            <q-input
+              v-if="LogReg === 'log'"
+              label="Введите пароль"
+              v-model="password"
+              filled
+              :type="isPwd ? 'password' : 'text'"
+              hint="Пароль"
+              :rules="[
+                (val) => !!val || '* Необходимо заполнить поле',
+                (val) =>
+                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/.test(val) ||
+                  '* Неверный пароль',
+                (val) => val.length >= 8 || 'Неверный пароль',
+              ]"
+              lazy-rules
+            >
+              <template v-slot:append>
+                <div class="cursor-pointer" @click="isPwd = !isPwd">
+                  <img
+                    :src="isPwd ? '/icons/eye.off.png' : '/icons/eye.on.png'"
+                    alt="Toggle Password"
+                    style="width: 30px; height: auto"
+                  />
+                </div>
+              </template>
+            </q-input>
             <q-btn
               type="submit"
               color="secondary"
               label="Сохранить"
               class="q-mt-md"
             ></q-btn>
-
-            <q-alert
-              v-if="emailAlreadyRegistered"
-              color="negative"
-              icon="warning"
-              class="q-mt-md"
-            >
-              *Данная почта уже зарегистрирована
-            </q-alert>
+            +
           </q-form>
         </q-card-section>
       </div>
@@ -237,9 +269,9 @@ export default {
     const INN = ref("");
     const selectedShape = ref("");
 
-    const shapeRules = [
-      (val) => !!val || "* Обязательно сделайте выбор",
-    ];
+    const shapeRules = [(val) => !!val || "* Обязательно сделайте выбор"];
+
+    const inputRef = ref(null);
 
     const registerUser = () => {
       // Логика регистрации пользователя
@@ -249,14 +281,19 @@ export default {
       emit("update:showRegistrationDialog", false);
     };
 
-    watch(() => props.showRegistrationDialog, (newValue) => {
-      dialogVisible.value = newValue;
-    });
+    watch(
+      () => props.showRegistrationDialog,
+      (newValue) => {
+        dialogVisible.value = newValue;
+      }
+    );
 
     return {
+      LogReg: ref("log"),
       dialogVisible,
       model: ref(" "),
       options: ["Клиент", "Сотрудник"],
+      inputRef,
       password,
       isPwd: ref(true),
       email,
@@ -276,11 +313,11 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    width: 350px;
-    height: 100%;
-    display: block;
-    text-align: center;
-    margin: 0 auto;
-  }
+.container {
+  width: 350px;
+  height: 100%;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
 </style>
