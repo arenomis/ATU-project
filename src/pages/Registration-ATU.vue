@@ -1,9 +1,5 @@
 <template>
-  <q-dialog
-    v-model="dialogVisible"
-    style="max-width: 400px"
-    @hide="closeRegistrationDialog"
-  >
+  <q-dialog v-model="dialogVisible" @hide="closeRegistrationDialog">
     <q-card class="">
       <q-card-action class="bg-white text-secondary">
         <q-btn flat icon="close" v-close-popup />
@@ -237,7 +233,6 @@
               label="Сохранить"
               class="q-mt-md"
             ></q-btn>
-            +
           </q-form>
         </q-card-section>
       </div>
