@@ -6,6 +6,7 @@
       class="archive-button q-mb-md"
       label="Сегодня"
     />
+    <!--для соеденения с беком :rows="filteredRow"-->
     <q-table
       v-if="showTable"
       :rows="sortedRows"
@@ -16,13 +17,13 @@
       :rows-per-page="rows.length"
       class="q-mt-md"
       :rows-per-page-options="[0]"
-      :mobile-cols="1" 
+      :mobile-cols="1"
     />
   </div>
 </template>
 
 <style>
-.container{
+.container {
   width: 80vh;
   display: block;
   text-align: center;
@@ -49,44 +50,51 @@
     width: 100vw;
   }
 }
-  .archive-button {
-    background-color: white;
-    color: black;
-    border: none;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-
+.archive-button {
+  background-color: white;
+  color: black;
+  border: none;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
 </style>
 
 <script>
+import moment from "moment";
+import axios from "axios";
+
 export default {
   data() {
     return {
       showTable: true,
+      //rows: [],  Здесь будут храниться данные из базы данны, убрать заполненный
       rows: [
         {
-          Time: "09.11.2023 16:30",
+          Date: "2023-11-30",
+          Time: "16:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "выполнено",
         },
         {
-          Time: "09.11.2023 19:00",
+          Date: "2023-11-30",
+          Time: "19:00",
           CarNumber: "E222EE222",
           CarType: "газель",
           Stage: "выполнено",
         },
         {
-          Time: "09.11.2023 14:45",
+          Date: "2023-11-30",
+          Time: "14:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
           Stage: "выполнено",
         },
         {
-          Time: "09.11.2023 14:55",
+          Date: "2023-11-30",
+          Time: "14:55",
           CarNumber: "E444EE444",
           CarType: "грузовой+прицеп",
           Stage: "выполнено",
@@ -133,36 +141,33 @@ export default {
   },
   computed: {
     sortedRows() {
-      return [...this.rows].sort((a, b) => {
-        const dateA = this.convertToDateObject(a.Time);
-        const dateB = this.convertToDateObject(b.Time);
-
-        if (dateA < dateB) return -1;
-        if (dateA > dateB) return 1;
-
-        const timeA = this.convertToTimeObject(a.Time);
-        const timeB = this.convertToTimeObject(b.Time);
-
-        if (timeA < timeB) return -1;
-        if (timeA > timeB) return 1;
-
-        return 0;
-      });
+      return this.rows
+        .filter((row) => {
+          const today = moment().startOf("day");
+          const rowDate = moment(row.Date, "YYYY-MM-DD");
+          return rowDate.isSame(today, "day");
+        })
+        .sort((a, b) => {
+          const dateTimeA = moment(`${a.Date} ${a.Time}`, "YYYY-MM-DD HH:mm");
+          const dateTimeB = moment(`${b.Date} ${b.Time}`, "YYYY-MM-DD HH:mm");
+          return dateTimeA - dateTimeB;
+        });
     },
   },
   methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get("**_сервер/путь_к_API");
+        this.rows = response.data;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
     toggleTable() {
+      if (this.showTable) {
+        this.fetchData(); // Загрузка данных при первом отображении таблицы
+      }
       this.showTable = !this.showTable;
-    },
-    convertToDateObject(dateTime) {
-      const [datePart, timePart] = dateTime.split(" ");
-      const [day, month, year] = datePart.split(".");
-      const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-      return new Date(`${formattedDate}T${timePart}`);
-    },
-    convertToTimeObject(dateTime) {
-      const [datePart, timePart] = dateTime.split(" ");
-      return timePart;
     },
   },
 };

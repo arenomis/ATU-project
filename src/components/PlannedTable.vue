@@ -6,6 +6,7 @@
       class="archive-button q-mb-md"
       label="Запланировано"
     />
+    <!--для соеденения с беком :rows="filteredRow"-->
     <q-table
       v-if="showTable"
       :rows="sortedRows"
@@ -16,13 +17,13 @@
       :rows-per-page="rows.length"
       class="q-mt-md"
       :rows-per-page-options="[0]"
-      :mobile-cols="1" 
+      :mobile-cols="1"
     />
   </div>
 </template>
 
 <style>
-.container{
+.container {
   width: 80vh;
   display: block;
   text-align: center;
@@ -61,62 +62,74 @@
 </style>
 <script>
 import moment from "moment";
+import axios from "axios";
 
 export default {
   data() {
     return {
       showTable: true,
+      //rows: [],  Здесь будут храниться данные из базы данных, убрать заполненный
       rows: [
         {
-          Date: "27.11.2023",
+          Date: "2023-11-30",
           Time: "16:30",
           CarNumber: "B123BB456",
           CarType: "легковой",
           Stage: "ожидание",
         },
         {
-          Date: "30.11.2023",
+          Date: "2023-11-30",
           Time: "10:00",
           CarNumber: "B789BB012",
           CarType: "газель",
           Stage: "в процессе",
         },
         {
-          Date: "30.01.2024",
+          Date: "2024-01-30",
           Time: "12:15",
           CarNumber: "C123CC456",
           CarType: "грузовой+прицеп",
           Stage: "ожидание",
         },
         {
-          Date: "29.12.2022",
+          Date: "2022-12-29",
           Time: "14:45",
           CarNumber: "B456BB789",
           CarType: "грузовой",
           Stage: "выполнено",
         },
-        
         {
-          Date: "30.01.2024",
+          Date: "2024-01-30",
           Time: "19:30",
           CarNumber: "C789CC012",
-          CarType: "автобус ",
+          CarType: "автобус",
           Stage: "в процессе",
         },
       ],
       columns: [
         {
-          name: "Date",
-          label: "Дата",
-          align: "left",
-          field: "Date",
-          sortable: false,
-        },
-        {
           name: "Time",
+          required: true,
           label: "Время",
           align: "left",
           field: "Time",
+          format: (val) => {
+            if (val.match(/\d{2}:\d{2}/)) {
+              return val.match(/\d{2}:\d{2}/)[0];
+            }
+            return "Invalid Time";
+          },
+          sortable: true,
+        },
+        {
+          name: "Date",
+          required: true,
+          label: "Дата",
+          align: "left",
+          field: "Date",
+          format: (val) => {
+            return moment(val).format("DD.MM.YYYY");
+          },
           sortable: false,
         },
         {
@@ -145,18 +158,34 @@ export default {
   },
   computed: {
     sortedRows() {
-      return [...this.rows].sort((a, b) => {
-        const dateTimeA = moment(`${a.Date} ${a.Time}`, "DD.MM.YYYY HH:mm");
-        const dateTimeB = moment(`${b.Date} ${b.Time}`, "DD.MM.YYYY HH:mm");
-        return dateTimeA - dateTimeB;
-      });
+      return this.rows
+        .filter((row) => {
+          const today = moment().startOf("day");
+          const rowDate = moment(row.Date, "YYYY-MM-DD");
+          return rowDate.isAfter(today, "day");
+        })
+        .sort((a, b) => {
+          const dateTimeA = moment(`${a.Date} ${a.Time}`, "YYYY-MM-DD HH:mm");
+          const dateTimeB = moment(`${b.Date} ${b.Time}`, "YYYY-MM-DD HH:mm");
+          return dateTimeA - dateTimeB;
+        });
     },
   },
   methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get("**_сервер/путь_к_API");
+        this.rows = response.data;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
     toggleTable() {
+      if (this.showTable) {
+        this.fetchData(); // Загрузка данных при первом отображении таблицы
+      }
       this.showTable = !this.showTable;
     },
   },
-  
 };
 </script>

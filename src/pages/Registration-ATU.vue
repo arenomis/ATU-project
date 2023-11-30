@@ -269,7 +269,9 @@ export default {
     const inputRef = ref(null);
 
     const registerUser = () => {
-      // Логика регистрации пользователя
+      //отправка регистрации
+      console.log("Form submitted!");
+      emit("update:showRegistrationDialog", false);
     };
 
     const closeRegistrationDialog = () => {
@@ -309,7 +311,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 350px;
+  width: 40vh;
   height: 100%;
   display: block;
   text-align: center;
