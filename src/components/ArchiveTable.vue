@@ -22,45 +22,6 @@
   </div>
 </template>
 
-<style>
-.container {
-  width: 80vh;
-  display: block;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-}
-
-.q-mb-md {
-  margin-bottom: var(--q-space-md);
-}
-
-.q-mt-md {
-  margin-top: var(--q-space-md);
-}
-
-.archive-button.active {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .container {
-    width: 100vw;
-  }
-  .archive-button {
-    background-color: white;
-    color: black;
-    border: none;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-}
-</style>
-
 <script>
 import moment from "moment";
 import axios from "axios";
@@ -68,7 +29,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      showTable: true,
+      showTable: false,
       //rows: [],  Здесь будут храниться данные из базы данных, убрать заполненный
       rows: [
         {
@@ -76,21 +37,21 @@ export default {
           Time: "16:30",
           CarNumber: "B123BB456",
           CarType: "легковой",
-          Stage: "ожидание",
+          Stage: "выполнено",
         },
         {
           Date: "2023-11-15",
           Time: "10:00",
           CarNumber: "B789BB012",
           CarType: "газель",
-          Stage: "в процессе",
+          Stage: "выполнено",
         },
         {
           Date: "2024-01-30",
           Time: "12:15",
           CarNumber: "C123CC456",
           CarType: "грузовой+прицеп",
-          Stage: "ожидание",
+          Stage: "выполнено",
         },
         {
           Date: "2022-12-29",
@@ -104,7 +65,7 @@ export default {
           Time: "19:30",
           CarNumber: "C789CC012",
           CarType: "автобус",
-          Stage: "в процессе",
+          Stage: "выполнено",
         },
       ],
       columns: [
@@ -120,7 +81,7 @@ export default {
             }
             return "Invalid Time";
           },
-          sortable: true,
+          sortable: false,
         },
         {
           name: "Date",

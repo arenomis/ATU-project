@@ -17,52 +17,22 @@
       :rows-per-page="rows.length"
       class="q-mt-md"
       :rows-per-page-options="[0]"
-      :mobile-cols="1"
-    />
+    >
+      <template v-slot:body-cell-Stage="props">
+        <q-td :props="props" pointer style="cursor: pointer">
+          <div @click="handleStageClick(props.row)">
+            {{ props.row.Stage }}
+          </div>
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
-<style>
-.container {
-  width: 80vh;
-  display: block;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-}
-
-.q-mb-md {
-  margin-bottom: var(--q-space-md);
-}
-
-.q-mt-md {
-  margin-top: var(--q-space-md);
-}
-
-.archive-button.active {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .container {
-    width: 100vw;
-  }
-  .archive-button {
-    background-color: white;
-    color: black;
-    border: none;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-}
-</style>
 <script>
 import moment from "moment";
 import axios from "axios";
+import { useQuasar } from "quasar";
 
 export default {
   data() {
@@ -119,7 +89,7 @@ export default {
             }
             return "Invalid Time";
           },
-          sortable: true,
+          sortable: false,
         },
         {
           name: "Date",
@@ -186,6 +156,39 @@ export default {
       }
       this.showTable = !this.showTable;
     },
+  },
+  setup() {
+    const $q = useQuasar();
+
+    function handleStageClick(row) {
+      const stage = row.Stage;
+      console.log(`Нажатие на этап: ${stage}`);
+      $q.dialog({
+        dark: false,
+        title: "Хотите отменить заказ?",
+        message: "После отмены вернуть заказ будет невозможно",
+        cancel: true,
+        persistent: true,
+        ok: {
+          color: "secondary",
+          label: "Да",
+        },
+        cancel: {
+          label: "Отмена",
+        },
+      })
+        .onOk(() => {
+          console.log("OK");
+        })
+        .onCancel(() => {
+          // Обработка нажатия Cancel
+        })
+        .onDismiss(() => {
+          // Обработка закрытия диалога
+        });
+    }
+
+    return { handleStageClick };
   },
 };
 </script>

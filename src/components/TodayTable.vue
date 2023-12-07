@@ -15,71 +15,43 @@
       style="border-top-left-radius: 0; border-top-right-radius: 0"
       hide-bottom
       :rows-per-page="rows.length"
-      class="q-mt-md"
+      card-class="q-mt-md"
       :rows-per-page-options="[0]"
-      :mobile-cols="1"
-    />
+      :grid="isMobile"
+    >
+      <!--как-то сделать при мобильй версии добавления grid-->
+      <template v-slot:body-cell-Stage="props">
+        <q-td :props="props" pointer style="cursor: pointer">
+          <div @click="handleStageClick(props.row)">
+            {{ props.row.Stage }}
+          </div>
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
-
-<style>
-.container {
-  width: 80vh;
-  display: block;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-}
-
-.q-mb-md {
-  margin-bottom: var(--q-space-md);
-}
-
-.q-mt-md {
-  margin-top: var(--q-space-md);
-}
-
-.archive-button.active {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .container {
-    width: 100vw;
-  }
-}
-.archive-button {
-  background-color: white;
-  color: black;
-  border: none;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 4px;
-}
-</style>
 
 <script>
 import moment from "moment";
 import axios from "axios";
+import { useQuasar } from "quasar";
 
 export default {
   data() {
     return {
+      isMobile: false,
+
       showTable: true,
-      //rows: [],  Здесь будут храниться данные из базы данны, убрать заполненный
       rows: [
         {
-          Date: "2023-11-30",
+          Date: "2023-12-08",
           Time: "16:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "выполнено",
         },
         {
-          Date: "2023-11-30",
+          Date: "2023-12-08",
           Time: "19:00",
           CarNumber: "E222EE222",
           CarType: "газель",
@@ -113,7 +85,7 @@ export default {
             }
             return "Invalid Time";
           },
-          sortable: true,
+          sortable: false,
         },
         {
           name: "CarNumber",
@@ -165,10 +137,56 @@ export default {
     },
     toggleTable() {
       if (this.showTable) {
-        this.fetchData(); // Загрузка данных при первом отображении таблицы
+        this.fetchData();
       }
       this.showTable = !this.showTable;
     },
+    handleResize() {
+      this.isMobile = window.innerWidth <= 600;
+    },
+  },
+  setup() {
+    const $q = useQuasar();
+
+    function handleStageClick(row) {
+      const stage = row.Stage;
+      console.log(`Нажатие на этап: ${stage}`);
+      $q.dialog({
+        dark: false,
+        title: "Хотите отменить заказ?",
+        message: "После отмены вернуть заказ будет невозможно",
+        cancel: true,
+        persistent: true,
+        ok: {
+          color: "secondary",
+          label: "Да",
+        },
+        cancel: {
+          label: "Отмена",
+        },
+      })
+        .onOk(() => {
+          console.log("OK");
+        })
+        .onCancel(() => {
+          // Обработка нажатия Cancel
+        })
+        .onDismiss(() => {
+          // Обработка закрытия диалога
+        });
+    }
+
+    return { handleStageClick };
+  },
+  mounted() {
+    // Проверяем, является ли устройство мобильным
+    this.isMobile = window.innerWidth <= 600; // Примерная ширина для мобильных устройств
+    // Добавляем обработчик события для изменения isMobile при изменении размера окна
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    // Удаляем обработчик события при уничтожении компонента
+    window.removeEventListener("resize", this.handleResize);
   },
 };
 </script>
