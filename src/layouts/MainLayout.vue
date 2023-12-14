@@ -13,11 +13,9 @@
           color="secondary"
         />
 
-        <q-toolbar-title>
-          АТУ сервис
-        </q-toolbar-title>
+        <q-toolbar-title> АТУ сервис </q-toolbar-title>
         <q-btn
-          v-if="!loggedIn" 
+          v-if="!loggedIn"
           flat
           dense
           round
@@ -30,7 +28,7 @@
           Вход
         </q-btn>
         <q-btn
-          v-else 
+          v-else
           flat
           dense
           round
@@ -43,22 +41,16 @@
           Выход
         </q-btn>
         <q-dialog v-model="showRegistrationDialog">
-          <registration-dialog v-model:showRegistrationDialog="showRegistrationDialog" />
+          <registration-dialog
+            v-model:showRegistrationDialog="showRegistrationDialog"
+          />
         </q-dialog>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Список страниц
-        </q-item-label>
+        <q-item-label header> Список страниц </q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
@@ -75,33 +67,33 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-import RegistrationDialog from 'pages/Registration-ATU.vue'
+import { defineComponent, ref } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
+import RegistrationDialog from "pages/Registration-ATU.vue";
 
 const linksList = [
   {
-    title: 'Novigation',
-    caption: 'slider',
-    icon: '<>',
-    link: '/slider'
+    title: "Novigation",
+    caption: "slider",
+    icon: "<>",
+    link: "/slider",
   },
   {
-    title: 'Registration',
-    caption: 'registration',
-    icon: '#',
-    link: '/registration'
+    title: "Registration",
+    caption: "registration",
+    icon: "#",
+    link: "/registration",
   },
   {
-    title: 'Kard',
-    caption: 'kard',
-    icon: '~',
-    link: '/kard'
-  }
-]
+    title: "Kard",
+    caption: "kard",
+    icon: "~",
+    link: "/kard",
+  },
+];
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
     EssentialLink,
@@ -112,7 +104,7 @@ export default defineComponent({
     const leftDrawerOpen = ref(false);
     const loggedIn = ref(false);
     const showRegistrationDialog = ref(false);
-    
+
     return {
       essentialLinks: linksList,
       leftDrawerOpen,

@@ -1,33 +1,69 @@
 <template>
-  <div class="q-pa-md container">
+  <div class="q-pa-md container-table-kard">
     <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
-      class="archive-button q-mb-md"
+      class="today-plan-button q-mb-md"
       label="Сегодня"
     />
-    <!--для соеденения с беком :rows="filteredRow"-->
-    <q-table
+
+    <div
       v-if="showTable"
-      :rows="sortedRows"
-      :columns="columns"
-      row-key="index"
-      style="border-top-left-radius: 0; border-top-right-radius: 0"
-      hide-bottom
-      :rows-per-page="rows.length"
-      card-class="q-mt-md"
-      :rows-per-page-options="[0]"
-      :grid="isMobile"
+      class="q-gutter-md"
+      style="display: flex; justify-content: center"
     >
-      <!--как-то сделать при мобильй версии добавления grid-->
-      <template v-slot:body-cell-Stage="props">
-        <q-td :props="props" pointer style="cursor: pointer">
-          <div @click="handleStageClick(props.row)">
-            {{ props.row.Stage }}
+      <q-card
+        v-for="(row, index) in sortedRows"
+        :key="index"
+        flat
+        bordered
+        class="my-card row"
+        @mouseenter="handleRowMouseOver(row)"
+        @mouseleave="handleRowMouseLeave"
+      >
+        <q-card-section>
+          <div class="col">
+            <div class="text-subtitle2 q-table__grid-item-title">Время:</div>
+            <div>
+              {{ row.Time }}
+            </div>
+            <div class="text-subtitle2 q-table__grid-item-title">
+              Номер машины:
+            </div>
+            <div>
+              {{ row.CarNumber }}
+            </div>
           </div>
-        </q-td>
-      </template>
-    </q-table>
+        </q-card-section>
+        <q-btn
+          v-if="isHovered && hoveredRow === row && isMobile"
+          class="absolute-right delete-btn"
+          flat
+          color="secondary"
+          @click="closeRow(row)"
+          icon="delete_forever"
+        ></q-btn>
+
+        <q-card-section>
+          <div class="text-subtitle2 q-table__grid-item-title">Тип машины:</div>
+          <div>
+            {{ row.CarType }}
+          </div>
+          <div class="text-subtitle2 q-table__grid-item-title">Этап:</div>
+          <div>
+            {{ row.Stage }}
+          </div>
+        </q-card-section>
+        <q-btn
+          v-if="isHovered && hoveredRow === row && !isMobile"
+          class="absolute-right delete-btn"
+          flat
+          color="secondary"
+          @click="closeRow(row)"
+          icon="delete_forever"
+        ></q-btn>
+      </q-card>
+    </div>
   </div>
 </template>
 
@@ -40,73 +76,37 @@ export default {
   data() {
     return {
       isMobile: false,
-
+      isHovered: false,
+      hoveredRow: null,
       showTable: true,
       rows: [
         {
-          Date: "2023-12-08",
+          Date: "2023-12-14",
           Time: "16:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "выполнено",
         },
         {
-          Date: "2023-12-08",
-          Time: "19:00",
+          Date: "2023-12-14",
+          Time: "15:00",
           CarNumber: "E222EE222",
           CarType: "газель",
           Stage: "выполнено",
         },
         {
-          Date: "2023-11-30",
+          Date: "2023-12-14",
           Time: "14:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
           Stage: "выполнено",
         },
         {
-          Date: "2023-11-30",
+          Date: "2023-12-14",
           Time: "14:55",
           CarNumber: "E444EE444",
           CarType: "грузовой+прицеп",
           Stage: "выполнено",
-        },
-      ],
-      columns: [
-        {
-          name: "Time",
-          required: true,
-          label: "Время",
-          align: "left",
-          field: "Time",
-          format: (val) => {
-            if (val.match(/\d{2}:\d{2}/)) {
-              return val.match(/\d{2}:\d{2}/)[0];
-            }
-            return "Invalid Time";
-          },
-          sortable: false,
-        },
-        {
-          name: "CarNumber",
-          label: "Номер машины",
-          align: "left",
-          field: "CarNumber",
-          sortable: false,
-        },
-        {
-          name: "CarType",
-          label: "Тип машины",
-          align: "left",
-          field: "CarType",
-          sortable: false,
-        },
-        {
-          name: "Stage",
-          label: "Этап",
-          align: "left",
-          field: "Stage",
-          sortable: false,
         },
       ],
     };
@@ -144,48 +144,54 @@ export default {
     handleResize() {
       this.isMobile = window.innerWidth <= 600;
     },
-  },
-  setup() {
-    const $q = useQuasar();
-
-    function handleStageClick(row) {
-      const stage = row.Stage;
-      console.log(`Нажатие на этап: ${stage}`);
-      $q.dialog({
-        dark: false,
-        title: "Хотите отменить заказ?",
-        message: "После отмены вернуть заказ будет невозможно",
-        cancel: true,
-        persistent: true,
-        ok: {
-          color: "secondary",
-          label: "Да",
-        },
-        cancel: {
-          label: "Отмена",
-        },
-      })
+    handleRowMouseOver(row) {
+      this.isHovered = true;
+      this.hoveredRow = row;
+    },
+    handleRowMouseLeave() {
+      this.isHovered = false;
+      this.hoveredRow = null;
+    },
+    closeRow(row) {
+      const stage = row;
+      console.log(`Нажатие на этап: ${row}`);
+      this.$q
+        .dialog({
+          dark: false,
+          title: "Хотите отменить заказ?",
+          message: "После отмены вернуть заказ будет невозможно",
+          cancel: true,
+          persistent: true,
+          ok: {
+            color: "secondary",
+            label: "Да",
+          },
+          cancel: {
+            label: "Отмена",
+          },
+        })
         .onOk(() => {
           console.log("OK");
+          // Ваш код для обработки нажатия OK
         })
         .onCancel(() => {
-          // Обработка нажатия Cancel
+          // Ваш код для обработки нажатия Cancel
         })
         .onDismiss(() => {
-          // Обработка закрытия диалога
+          // Ваш код для обработки закрытия диалога
         });
-    }
-
-    return { handleStageClick };
+    },
+    handleStageClick(row) {
+      const stage = row;
+      console.log(`Нажатие на этап: ${row}`);
+      // Ваш код для обработки нажатия на этап
+    },
   },
   mounted() {
-    // Проверяем, является ли устройство мобильным
-    this.isMobile = window.innerWidth <= 600; // Примерная ширина для мобильных устройств
-    // Добавляем обработчик события для изменения isMobile при изменении размера окна
+    this.isMobile = window.innerWidth <= 600;
     window.addEventListener("resize", this.handleResize);
   },
   beforeUnmount() {
-    // Удаляем обработчик события при уничтожении компонента
     window.removeEventListener("resize", this.handleResize);
   },
 };

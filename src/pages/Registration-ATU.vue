@@ -15,7 +15,7 @@
         />
       </q-card-action>
 
-      <div class="container bg-white">
+      <div class="container-card-section bg-white">
         <q-card-section>
           <h3 v-if="LogReg === 'reg'" class="text-h6">Регистрация</h3>
           <h3 v-if="LogReg === 'log'" class="text-h6">Вход</h3>
@@ -308,13 +308,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.container {
-  width: 40vh;
-  height: 100%;
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md container">
+  <div class="q-pa-md container-table-kard">
     <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
@@ -70,20 +70,6 @@ export default {
       ],
       columns: [
         {
-          name: "Time",
-          required: true,
-          label: "Время",
-          align: "left",
-          field: "Time",
-          format: (val) => {
-            if (val.match(/\d{2}:\d{2}/)) {
-              return val.match(/\d{2}:\d{2}/)[0];
-            }
-            return "Invalid Time";
-          },
-          sortable: false,
-        },
-        {
           name: "Date",
           required: true,
           label: "Дата",
@@ -106,13 +92,6 @@ export default {
           label: "Тип машины",
           align: "left",
           field: "CarType",
-          sortable: false,
-        },
-        {
-          name: "Stage",
-          label: "Этап",
-          align: "left",
-          field: "Stage",
           sortable: false,
         },
       ],
