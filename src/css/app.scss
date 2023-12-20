@@ -6,7 +6,7 @@ body {
 // Kard_ATU
 .archive-button,
 .today-plan-button {
-  background-color: white;
+  background-color: #f3f4f4;
   color: black;
   border: none;
   width: 100%;
@@ -24,11 +24,16 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 20px auto;
 }
 .my-card,
 .my-card-plan {
+  margin-right: 0;
   width: 47%;
+}
+.section-time-date {
+  margin-right: 1vh;
+  margin-left: 1vh;
+  margin-top: 50%;
 }
 .q-gutter-md {
   display: flex;
@@ -67,7 +72,7 @@ body {
 
 //Registration/Aut
 .container-card-section {
-  width: 100%;
+  width: 45vh;
   height: 100%;
   display: block;
   text-align: center;

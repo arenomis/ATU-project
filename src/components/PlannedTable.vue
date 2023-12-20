@@ -3,7 +3,7 @@
     <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
-      class="today-plan-button q-mb-md"
+      class="today-plan-button q-mb-md gray"
       label="Запланировано"
     />
     <div
@@ -79,13 +79,7 @@
     </div>
   </div>
 </template>
-<style scoped>
-.section-time-date {
-  margin-right: 1vh;
-  margin-left: 1vh;
-  margin-top: 50%;
-}
-</style>
+<style scoped></style>
 <script>
 import moment from "moment";
 import axios from "axios";
@@ -149,7 +143,7 @@ export default {
         .sort((a, b) => {
           const dateTimeA = moment(`${a.Date} ${a.Time}`, "YYYY-MM-DD HH:mm");
           const dateTimeB = moment(`${b.Date} ${b.Time}`, "YYYY-MM-DD HH:mm");
-          return dateTimeA - dateTimeB;
+          return dateTimeB - dateTimeA;
         });
     },
   },

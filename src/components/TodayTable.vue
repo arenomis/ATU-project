@@ -18,6 +18,9 @@
         flat
         bordered
         class="my-card row"
+        :style="{
+          backgroundColor: isCompleted(row.Stage) ? '#A3A3A5' : '',
+        }"
         @mouseenter="handleRowMouseOver(row)"
         @mouseleave="handleRowMouseLeave"
       >
@@ -50,7 +53,11 @@
             {{ row.CarType }}
           </div>
           <div class="text-subtitle2 q-table__grid-item-title">Этап:</div>
-          <div>
+          <div
+            :style="{
+              color: isCompleted(row.Stage) ? '#30e3ca' : '',
+            }"
+          >
             {{ row.Stage }}
           </div>
         </q-card-section>
@@ -70,7 +77,6 @@
 <script>
 import moment from "moment";
 import axios from "axios";
-import { useQuasar } from "quasar";
 
 export default {
   data() {
@@ -81,32 +87,32 @@ export default {
       showTable: true,
       rows: [
         {
-          Date: "2023-12-14",
-          Time: "16:30",
+          Date: "2023-12-18",
+          Time: "14:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
-          Stage: "выполнено",
+          Stage: "Выполнено",
         },
         {
-          Date: "2023-12-14",
+          Date: "2023-12-18",
           Time: "15:00",
           CarNumber: "E222EE222",
           CarType: "газель",
-          Stage: "выполнено",
+          Stage: "Ожидает",
         },
         {
-          Date: "2023-12-14",
+          Date: "2023-12-18",
           Time: "14:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
-          Stage: "выполнено",
+          Stage: "Ожидает",
         },
         {
-          Date: "2023-12-14",
+          Date: "2023-12-15",
           Time: "14:55",
           CarNumber: "E444EE444",
           CarType: "грузовой+прицеп",
-          Stage: "выполнено",
+          Stage: "Выполнено",
         },
       ],
     };
@@ -122,7 +128,7 @@ export default {
         .sort((a, b) => {
           const dateTimeA = moment(`${a.Date} ${a.Time}`, "YYYY-MM-DD HH:mm");
           const dateTimeB = moment(`${b.Date} ${b.Time}`, "YYYY-MM-DD HH:mm");
-          return dateTimeA - dateTimeB;
+          return dateTimeB - dateTimeA;
         });
     },
   },
@@ -185,6 +191,9 @@ export default {
       const stage = row;
       console.log(`Нажатие на этап: ${row}`);
       // Ваш код для обработки нажатия на этап
+    },
+    isCompleted(stage) {
+      return stage === "Выполнено";
     },
   },
   mounted() {

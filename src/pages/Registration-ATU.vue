@@ -26,7 +26,7 @@
             <q-input
               v-if="LogReg === 'reg'"
               filled
-              v-model="lastname"
+              v-model="last_name"
               label="Фамилия"
               hint="Минимальная длина - 2 символа"
               :rules="[
@@ -60,7 +60,7 @@
             <q-input
               v-if="LogReg === 'reg'"
               filled
-              v-model="surname"
+              v-model="middle_name"
               label="Отчество"
               hint="Минимальная длина - 2 символа"
               :rules="[
@@ -77,21 +77,21 @@
               v-if="LogReg === 'reg'"
               color="secondary"
               filled
-              v-model="model"
+              v-model="position"
               :options="options"
               label="Полномочия"
               hint="Выберите полномочия"
             >
-              <template v-if="model" v-slot:append>
+              <template v-if="position" v-slot:append>
                 <q-icon
                   name="cancel"
-                  @click.stop.prevent="model = null"
+                  @click.stop.prevent="position = null"
                   class="cursor-pointer"
                 />
               </template>
             </q-select>
 
-            <div class="q-gutter-sm" v-if="model === 'Клиент'">
+            <div class="q-gutter-sm" v-if="position === 'Клиент'">
               <q-radio
                 v-model="selectedShape"
                 color="secondary"
@@ -112,9 +112,9 @@
               />
             </div>
             <q-input
-              v-if="selectedShape === 'Юр. лицо' && model === 'Клиент'"
+              v-if="selectedShape === 'Юр. лицо' && position === 'Клиент'"
               filled
-              v-model="INN"
+              v-model="inn"
               label="ИНН организации"
               hint="ИНН организации"
               mask="##########"
@@ -133,7 +133,7 @@
             <q-input
               v-if="LogReg === 'reg'"
               filled
-              v-model="phone"
+              v-model="phone_number"
               label="Мобильный телефон"
               type="tel"
               hint="Мобильный телефон"
@@ -256,12 +256,12 @@ export default {
     const dialogVisible = ref(props.showRegistrationDialog);
     const confirmPassword = ref("");
     const email = ref("");
-    const phone = ref("");
+    const phone_number = ref("");
     const password = ref("");
     const name = ref("");
-    const lastname = ref("");
-    const surname = ref("");
-    const INN = ref("");
+    const last_name = ref("");
+    const middle_name = ref("");
+    const inn = ref("");
     const selectedShape = ref("");
 
     const shapeRules = [(val) => !!val || "* Обязательно сделайте выбор"];
@@ -288,18 +288,18 @@ export default {
     return {
       LogReg: ref("log"),
       dialogVisible,
-      model: ref(" "),
+      position: ref(" "),
       options: ["Клиент", "Сотрудник"],
       inputRef,
       password,
       isPwd: ref(true),
       email,
-      phone,
+      phone_number,
       confirmPassword,
       name,
-      lastname,
-      surname,
-      INN,
+      last_name,
+      middle_name,
+      inn,
       selectedShape,
       shapeRules,
       registerUser,

@@ -90,6 +90,12 @@ const linksList = [
     icon: "~",
     link: "/kard",
   },
+  {
+    title: "Kard-worker",
+    caption: "kard-worker",
+    icon: "(.-.)",
+    link: "/kard-worker",
+  },
 ];
 
 export default defineComponent({
