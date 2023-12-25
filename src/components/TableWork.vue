@@ -19,6 +19,7 @@
         bordered
         class="my-card-plan row"
         style="cursor: pointer"
+        @click="toggleStatusSelection(row)"
       >
         <q-card-section :horizontal="!isMobile">
           <div class="col section-time-date">
@@ -60,9 +61,25 @@
             </div>
           </q-card-section>
         </div>
+        <div
+          class="worker-section"
+          v-if="isSelectedRow(row)"
+          @click.stop
+          style="background: white"
+        >
+          <q-select
+            v-model="selectedStatus"
+            :options="statusOptions"
+            label="Выберите новый статус"
+            outlined
+            dense
+            @input="changeStatus(row, $event)"
+          />
+          <q-btn @click="changeStatus(row)" label="Применить" />
+        </div>
       </q-card>
     </div>
-    <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------->
     <q-btn
       @click="toggleTable"
       :class="{ active: showTable }"
@@ -122,23 +139,24 @@
             <div>
               {{ row.Stage }}
             </div>
+            <div
+              class="worker-section"
+              v-if="isSelectedRow(row)"
+              @click.stop
+              style="background: white"
+            >
+              <q-select
+                v-model="selectedStatus"
+                :options="statusOptions"
+                label="Выберите новый статус"
+                outlined
+                dense
+                @input="changeStatus(row, $event)"
+              />
+              <q-btn @click="changeStatus(row)" label="Применить" />
+            </div>
           </q-card-section>
         </div>
-        <q-card-section
-          v-if="isSelectedRow(row)"
-          @click.stop
-          style="background: white"
-        >
-          <q-select
-            v-model="selectedStatus"
-            :options="statusOptions"
-            label="Выберите новый статус"
-            outlined
-            dense
-            @input="changeStatus(row, $event)"
-          />
-          <q-btn @click="changeStatus(row)" label="Применить" />
-        </q-card-section>
       </q-card>
     </div>
   </div>
@@ -161,35 +179,35 @@ export default {
 
       rows: [
         {
-          Date: "2023-12-19",
+          Date: "2023-12-25",
           Time: "14:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "Выполнено",
         },
         {
-          Date: "2023-12-19",
+          Date: "2023-12-25",
           Time: "15:00",
           CarNumber: "E222EE222",
           CarType: "газель",
           Stage: "В работе",
         },
         {
-          Date: "2023-12-19",
+          Date: "2023-12-25",
           Time: "17:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
           Stage: "Ожидает",
         },
         {
-          Date: "2023-12-19",
+          Date: "2023-12-25",
           Time: "14:45",
           CarNumber: "E343EE344",
           CarType: "грузовой",
           Stage: "Ожидает",
         },
         {
-          Date: "2023-12-19",
+          Date: "2023-12-25",
           Time: "14:55",
           CarNumber: "E444EE444",
           CarType: "грузовой+прицеп",
@@ -213,8 +231,8 @@ export default {
         });
     },
     filteredRows() {
-      const filtered = this.sortedRows.filter(
-        (row) => !this.isCompleted(row.Stage) && !this.isCompleted2(row.Stage)
+      const filtered = this.sortedRows.filter((row) =>
+        this.isCompleted(row.Stage)
       );
       return filtered;
     },
@@ -274,7 +292,7 @@ export default {
     },
 
     isCompleted(stage) {
-      return stage.toLowerCase() === "выполнено";
+      return stage.toLowerCase() === "в работе";
     },
 
     isCompleted2(stage) {

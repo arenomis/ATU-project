@@ -21,8 +21,8 @@
         :style="{
           backgroundColor: isCompleted(row.Stage) ? '#A3A3A5' : '',
         }"
-        @mouseenter="handleRowMouseOver(row)"
-        @mouseleave="handleRowMouseLeave"
+        @mouseenter="!isCompleted(row.Stage) && handleRowMouseOver(row)"
+        @mouseleave="!isCompleted(row.Stage) && handleRowMouseLeave"
       >
         <q-card-section>
           <div class="col">
@@ -53,11 +53,7 @@
             {{ row.CarType }}
           </div>
           <div class="text-subtitle2 q-table__grid-item-title">Этап:</div>
-          <div
-            :style="{
-              color: isCompleted(row.Stage) ? '#30e3ca' : '',
-            }"
-          >
+          <div>
             {{ row.Stage }}
           </div>
         </q-card-section>
@@ -87,25 +83,25 @@ export default {
       showTable: true,
       rows: [
         {
-          Date: "2023-12-18",
+          Date: "2023-12-25",
           Time: "14:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "Выполнено",
         },
         {
-          Date: "2023-12-18",
+          Date: "2023-12-25",
           Time: "15:00",
           CarNumber: "E222EE222",
           CarType: "газель",
           Stage: "Ожидает",
         },
         {
-          Date: "2023-12-18",
+          Date: "2023-12-25",
           Time: "14:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
-          Stage: "Ожидает",
+          Stage: "Выполнено",
         },
         {
           Date: "2023-12-15",

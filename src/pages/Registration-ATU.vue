@@ -22,9 +22,8 @@
         </q-card-section>
 
         <q-card-section>
-          <q-form @submit="registerUser">
+          <q-form @submit="registerUser" v-if="LogReg === 'reg'">
             <q-input
-              v-if="LogReg === 'reg'"
               filled
               v-model="last_name"
               label="Фамилия"
@@ -41,7 +40,6 @@
             ></q-input>
 
             <q-input
-              v-if="LogReg === 'reg'"
               filled
               v-model="name"
               label="Имя"
@@ -58,7 +56,6 @@
             ></q-input>
 
             <q-input
-              v-if="LogReg === 'reg'"
               filled
               v-model="middle_name"
               label="Отчество"
@@ -74,7 +71,6 @@
               lazy-rules
             ></q-input>
             <q-select
-              v-if="LogReg === 'reg'"
               color="secondary"
               filled
               v-model="position"
@@ -131,7 +127,6 @@
             ></q-input>
 
             <q-input
-              v-if="LogReg === 'reg'"
               filled
               v-model="phone_number"
               label="Мобильный телефон"
@@ -144,7 +139,6 @@
             </q-input>
 
             <q-input
-              v-if="LogReg === 'reg'"
               label="Введите пароль"
               v-model="password"
               filled
@@ -173,7 +167,6 @@
             </q-input>
 
             <q-input
-              v-if="LogReg === 'reg'"
               label="Повторите пароль"
               v-model="confirmPassword"
               filled
@@ -201,8 +194,24 @@
                 </div>
               </template>
             </q-input>
+
+            <q-btn
+              type="submit"
+              color="secondary"
+              label="Сохранить"
+              class="q-mt-md"
+            ></q-btn>
+          </q-form>
+          <q-form @submit="registerUser" v-if="LogReg === 'log'">
             <q-input
-              v-if="LogReg === 'log'"
+              filled
+              v-model="email"
+              label="Адрес эл.почты"
+              type="email"
+              hint="Email"
+              :rules="[(val) => !!val || '* Необходимо заполнить поле']"
+            ></q-input>
+            <q-input
               label="Введите пароль"
               v-model="password"
               filled
