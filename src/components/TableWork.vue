@@ -179,35 +179,35 @@ export default {
 
       rows: [
         {
-          Date: "2023-12-25",
+          Date: "2024-01-08",
           Time: "14:30",
           CarNumber: "E111EE111",
           CarType: "легковой",
           Stage: "Выполнено",
         },
         {
-          Date: "2023-12-25",
+          Date: "2024-01-08",
           Time: "15:00",
           CarNumber: "E222EE222",
           CarType: "газель",
           Stage: "В работе",
         },
         {
-          Date: "2023-12-25",
+          Date: "2024-01-08",
           Time: "17:45",
           CarNumber: "E333EE333",
           CarType: "грузовой",
           Stage: "Ожидает",
         },
         {
-          Date: "2023-12-25",
+          Date: "2024-01-08",
           Time: "14:45",
           CarNumber: "E343EE344",
           CarType: "грузовой",
           Stage: "Ожидает",
         },
         {
-          Date: "2023-12-25",
+          Date: "2024-01-08",
           Time: "14:55",
           CarNumber: "E444EE444",
           CarType: "грузовой+прицеп",
